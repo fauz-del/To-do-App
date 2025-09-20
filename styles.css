@@ -1,0 +1,278 @@
+
+html { 
+  overflow-y: scroll;
+  box-sizing: border-box;
+}
+
+body{
+  font-family: 'Poppins', sans-serif;
+  background: #8a7a6a;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+#container{
+  position: absolute;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 6px 15px 10px rgba(0,0,0,0.3);
+  overflow: hidden;
+  height: 500px;
+  width: 340px;
+  padding: 10px 10px;
+  box-sizing: border-box;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto; /* let the container scroll internally */
+}
+
+#list-header {
+  display: flex;
+  justify-content: left;
+  align-items: left;
+}
+
+.blankDiv {
+  background-color: #fff;
+  border: none;
+  border-radius: 8px;
+  height: 100px;
+  width: 100px;
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#addNoteDiv {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+  height: 100px;
+  width: 100px;
+  margin: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#addNoteDiv:hover {
+  transition: 0.25s;
+  background: #f1f1f1;
+}
+
+#addNoteDiv i {
+  font-size: 70px;
+  color: gainsboro;
+}
+
+/* --- Notes list ---*/
+#list-container {
+  display: flex;
+  justify-content: left;
+  align-items: left;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+li {
+  background-color: #fff385;
+  margin: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 140px;
+  width: 140px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  box-sizing: border-box;
+}
+
+li span {
+  font-size: 12px;
+  word-wrap: break-word;
+  overflow-y: auto;
+  max-height: 60px;
+  margin-bottom: 6px;
+}
+
+/* timestamp under the note text */
+li small {
+  display: block;
+  font-size: 11px;
+  color: #666;
+  margin-top: 4px;
+  text-align: center;
+}
+
+#noteBtns-container,
+#noteBtns-container > * {
+  box-sizing: border-box;
+}
+
+#noteBtns-container {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+  align-items: center;
+  justify-content: center;
+}
+
+button#editBtn,
+button[id="editBtn"],
+button.editBtn {
+  background-color: gray;
+  color: #fff;
+  border: none;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button#deleteBtn,
+button[id="deleteBtn"],
+button.deleteBtn {
+  background-color: burlywood;
+  color: #fff;
+  border: none;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button#deleteBtn:hover,
+button[id="deleteBtn"]:hover,
+button.deleteBtn:hover {
+  background-color: #8a7a6a;
+}
+
+/* icon inside button slightly larger */
+#noteBtns-container i { font-size: 14px; }
+
+#overlay {
+  position: absolute;
+  inset: 0;                  /* top:0; right:0; bottom:0; left:0 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.45);
+  z-index: 2000;
+  padding: 20px;             /* ensure popup has breathing room on very small screens */
+}
+
+/* helper to hide overlay */
+.hidden { display: none !important; }
+
+/* popup box (responsive, will not force body scroll) */
+.popup,
+#popup,
+#popupContainer {
+  position: relative;         /* placed inside overlay flexbox */
+  width: min(380px, 92vw);
+  max-height: 90vh;
+  overflow: auto;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  box-sizing: border-box;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  z-index: 2001;
+}
+
+/* Ensure old #popup rule doesn't use top/left transform (override) */
+#popup { top: auto; left: auto; transform: none; }
+
+/* editing-container stays fixed above overlay (if you create it separately) */
+#editing-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(380px, 92vw);
+  max-height: 90vh;
+  overflow: auto;
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  z-index: 3000;
+}
+
+/* popup inner controls (buttons row) */
+#btn-container,
+.popup-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+/* popup textarea sizing */
+.popup textarea,
+#popup textarea,
+#popupContainer textarea,
+#editing-container textarea {
+  width: 100%;
+  height: 200px;
+  max-height: 60vh;
+  margin: 8px 0 0 0;
+  padding: 10px;
+  border-radius: 6px;
+  border: 2px solid #8a7a6a;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+/* popup action buttons */
+#submitBtn,
+#closeBtn,
+button#submitBtn,
+button#closeBtn {
+  min-width: 100px;
+  background-color: #8a7a6a;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  margin: 0;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+#closeBtn { background: gainsboro; color: #000; }
+
+/* subtle hover */
+#submitBtn:hover { transform: translateY(-1px); opacity: 0.97; }
+#closeBtn:hover { transform: translateY(-1px); opacity: 0.97; }
+
+/* small screens: make popup fit and buttons stack a bit */
+@media (max-width: 420px) {
+  .popup, #popup, #popupContainer, #editing-container {
+    width: 94vw;
+    padding: 12px;
+  }
+  #noteBtns-container { gap: 8px; }
+}
